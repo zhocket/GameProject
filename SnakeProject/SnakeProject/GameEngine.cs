@@ -10,7 +10,9 @@ namespace SnakeProject
 {
     class GameEngine
     {
-        int x = 50, y = 50, z = 6, k = 6;
+        int x = 50, y = 50, z = 6;
+        int sizeMatrix;
+
         MainForm window;
         public void Initialize()
         {
@@ -20,6 +22,7 @@ namespace SnakeProject
 
             time.Interval = 1000 / 25;
             time.Start();
+            sizeMatrix = 10;
 
             Application.Run(window);
         }
@@ -38,7 +41,15 @@ namespace SnakeProject
 
         public void Draw(Object obj, PaintEventArgs pe)
         {
-            pe.Graphics.DrawEllipse(new Pen(Color.Red, 3), new Rectangle(x++, y++, z--, k));
+            pe.Graphics.DrawEllipse(new Pen(Color.Red, 3), new Rectangle(x, y, z, z));
+
+            for(int i = 0; i < sizeMatrix; i++)
+            {
+                for(int j = 0; j < sizeMatrix; j++)
+                {
+                    pe.Graphics.FillRectangle(Brushes.White, i * (840 / sizeMatrix)+1, j * (640 / sizeMatrix)+1, (840/sizeMatrix)-2, (640/sizeMatrix)-2);
+                }
+            }
         }
 
     }
