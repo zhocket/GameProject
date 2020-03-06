@@ -8,5 +8,6 @@ namespace SnakeProject
 {
     class Body
     {
+        Console.WriteLine("adam is here");
     }
 }
