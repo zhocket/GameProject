@@ -10,9 +10,11 @@ namespace SnakeProject
 {
     class GameEngine
     {
-        int sizeMatrix;
+        int sizeMatrix, i, j;
         int[,] matrix;
-        int startX = 5, startY = 5;
+        int DirectionX = 0, DirectionY = 1;
+        int snakeX = 4, snakeY = 4;
+        int Tail;
         MainForm window;
         public void Initialize()
         {
@@ -29,16 +31,34 @@ namespace SnakeProject
 
             Application.Run(window);
         }
-
-        public void Snake()
+        enum SteerSnake
         {
-            matrix[5, 5] = 1;
-            matrix[6, 5] = 2;
-            matrix[startX, startY] = 3;
+            Left,
+            Right,
+            Up,
+            Down
+        }
+        public void SnakeMove()
+        {
+            snakeX += DirectionX;
+            snakeY += DirectionY;
+            matrix[snakeX, snakeY] = 3;
+            Tail = 2;
+
+            for (i = 0; i < sizeMatrix; i++)
+            {
+                for (j = 0; j < sizeMatrix; j++)
+                {
+                    if (matrix[i, j] == Tail)
+                        matrix[i, j] = 0;
+                }
+            }
         }
         public void Run()
         {
-            
+            window.Paint += Draw;
+            window.KeyDown += KeyPress;
+            window.Refresh();
         }
         void GameForm_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -46,41 +66,49 @@ namespace SnakeProject
         }
         private void TimerEventHandler(object sender, EventArgs e)
         {
-            Snake();
-
-            startX++;
-            window.Paint += Draw;
-            window.KeyDown += KeyPress;
-            window.Refresh();
+            SnakeMove();
+            
+            Run();
         }
 
         public void KeyPress(Object obj, KeyEventArgs a)
         {
             if (a.KeyCode == Keys.Up)
             {
-                startY--;
+                DirectionX = 0;
+                DirectionY = -1;
+            }
+            if (a.KeyCode == Keys.Down)
+            {
+                DirectionX = 0;
+                DirectionY = 1;
             }
             if (a.KeyCode == Keys.Left)
             {
-                startX--;
+                DirectionY = 0;
+                DirectionX = -1;
+            }
+            if (a.KeyCode == Keys.Right)
+            {
+                DirectionY = 0;
+                DirectionX = 1;
             }
         }
         public void Draw(Object obj, PaintEventArgs pe)
         {
-            //pe.Graphics.DrawEllipse(new Pen(Color.Red, 3), new Rectangle(x, y, z, z));
 
-            for(int i = 0; i < sizeMatrix; i++)
+            for(i = 0; i < sizeMatrix; i++)
             {
-                for(int j = 0; j < sizeMatrix; j++)
+                for(j = 0; j < sizeMatrix; j++)
                 {
                     if (matrix[i, j] == 0)
                         pe.Graphics.FillRectangle(Brushes.White, i * (840 / sizeMatrix) + 1, j * (640 / sizeMatrix) + 1, (840 / sizeMatrix) - 2, (640 / sizeMatrix) - 2);
                     else if (matrix[i, j] == 1)
                         pe.Graphics.FillRectangle(Brushes.Green, i * (840 / sizeMatrix) + 1, j * (640 / sizeMatrix) + 1, (840 / sizeMatrix) - 2, (640 / sizeMatrix) - 2);
                     else if(matrix[i,j]==2)
-                        pe.Graphics.FillRectangle(Brushes.Black, i * (840 / sizeMatrix) + 1, j * (640 / sizeMatrix) + 1, (840 / sizeMatrix) - 2, (640 / sizeMatrix) - 2);
-                    else if(matrix[i,j]==3)
                         pe.Graphics.FillRectangle(Brushes.Magenta, i * (840 / sizeMatrix) + 1, j * (640 / sizeMatrix) + 1, (840 / sizeMatrix) - 2, (640 / sizeMatrix) - 2);
+                    else if(matrix[i,j]==3)
+                        pe.Graphics.FillRectangle(Brushes.Black, i * (840 / sizeMatrix) + 1, j * (640 / sizeMatrix) + 1, (840 / sizeMatrix) - 2, (640 / sizeMatrix) - 2);
                 }
             }
         }

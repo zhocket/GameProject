@@ -15,6 +15,6 @@ namespace SnakeProject
             Width = 840;
             //BackColor = Color.Purple;
             Text = "Snake Game";
-            }
+        }
     }
 }
