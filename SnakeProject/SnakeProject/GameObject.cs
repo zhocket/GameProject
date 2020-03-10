@@ -9,21 +9,15 @@ namespace SnakeProject
 {
     abstract class GameObject
     {
-        int x, y;
-        public GameObject(int _x, int _y)
+        private int x, y;
+        public GameObject(int x, int y)
         {
-            x = _x;
-            y = _y;
+            this.x = x;
+            this.y = y;
         }
-        public int X { 
-            get { return x; }
-            set { x = value; } 
-        }
-        public int Y
-        {
-            get { return y; }
-            set { y = value; }
-        }
+
+        public int X { get { return x; } set { x = value; } }
+        public int Y { get { return y; } set { y = value; } }
 
         public abstract void Draw(Graphics g);
     }

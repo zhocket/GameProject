@@ -1,26 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
 
 namespace SnakeProject
 {
     abstract class PhysicalObject : GameObject
     {
-        //int x, y;
-        public PhysicalObject(int _x, int _y):base(_x, _y)
+        public PhysicalObject(int x, int y) : base(x, y)
         {
-            //x = _x;
-            //y = _y;
+
         }
 
-
-
-        public bool collision(int x, int y, int direction)
+        public bool CheckCollision(int xPos, int yPos, int xNext, int yNext)
         {
             return false;
         }
+
     }
 }

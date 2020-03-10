@@ -11,47 +11,38 @@ namespace SnakeProject
     class GameEngine
     {
         MainForm window;
-        Timer time;
-        List<GameObject> Objects;
-
-        Snake PlayerOne;
-
-        public GameEngine()
-        {
-            window = new MainForm();
-            time = new Timer();
-            Objects = new List<GameObject>();
-
-            PlayerOne = new Snake(5, 5);
-        }
-
         public void Initialize()
         {
-            window.Paint += Draw;
+            window = new MainForm();
+            Timer time = new Timer();
+            time.Tick += TimerEventHandler;
 
-            time.Tick += Time_Tick;
-
-            time.Interval = 1000;
+            time.Interval = 1000 / 25;
             time.Start();
-
-            //RealTime();
 
             Application.Run(window);
         }
 
-        private void Time_Tick(object sender, EventArgs e)
+        public void Run()
         {
+            
+        }
+
+        private void TimerEventHandler(object sender, EventArgs e)
+        {
+            
+            window.Paint += Draw;
             window.Refresh();
         }
 
-        private void Draw(Object obj, PaintEventArgs args)
+        public void Draw(Object obj, PaintEventArgs pe)
         {
 
-            foreach (var square in Objects)
-            {
-                square.Draw(args.Graphics);
 
-            }
+        }
+        public void KeyPressed(Object obj, KeyEventArgs key)
+        {
+
         }
 
     }
