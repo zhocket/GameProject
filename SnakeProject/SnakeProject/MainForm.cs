@@ -10,7 +10,8 @@ namespace SnakeProject
 {
     class MainForm : Form
     {
-        public MainForm() : base(){
+        public MainForm() : base()
+        {
             Height = 640;
             Width = 840;
             //BackColor = Color.Purple;

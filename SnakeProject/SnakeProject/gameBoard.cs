@@ -7,17 +7,17 @@ using System.Drawing;
 
 namespace SnakeProject
 {
-    class Snake:VectorObject
+    class gameBoard:PhysicalObject
     {
         int x, y;
-        public Snake(int _x, int _y):base(_x, _y)
+        public gameBoard(int _x, int _y) : base(_x, _y)
         {
-
+            x = _x;
+            y = _y;
         }
-
         public override void Draw(Graphics g)
         {
-
+            throw new NotImplementedException();
         }
     }
 }

@@ -6,7 +6,16 @@ using System.Threading.Tasks;
 
 namespace SnakeProject
 {
-    class VectorObject
+    abstract class VectorObject:PhysicalObject
     {
+        private int x;
+        private int y;
+
+        public VectorObject(int _x, int _y) : base(_x, _y)
+        {
+            x = _x;
+            y = _y;
+        }
+
     }
 }
