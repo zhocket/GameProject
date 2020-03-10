@@ -10,7 +10,6 @@ namespace SnakeProject
 {
     class GameEngine
     {
-        int x = 50, y = 50, z = 6, k = 6;
         MainForm window;
         public void Initialize()
         {
@@ -31,14 +30,19 @@ namespace SnakeProject
 
         private void TimerEventHandler(object sender, EventArgs e)
         {
-
+            
             window.Paint += Draw;
             window.Refresh();
         }
 
         public void Draw(Object obj, PaintEventArgs pe)
         {
-            pe.Graphics.DrawEllipse(new Pen(Color.Red, 3), new Rectangle(x++, y++, z--, k));
+
+
+        }
+        public void KeyPressed(Object obj, KeyEventArgs key)
+        {
+
         }
 
     }
