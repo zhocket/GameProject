@@ -10,20 +10,26 @@ namespace SnakeProject
     class Body : PhysicalObject
     {
         private int index;
-        private int xPosition;
-        private int yPosition;
-        public Body(int xInd, int yInd, int index) : base(xInd*25, yInd*25)
+        private int xInd;
+        private int yInd;
+        public Body(int xInd, int yInd, int index) : base(xInd, yInd)
         {
             this.index = index;
-            xPosition = xInd * 25;
-            yPosition = yInd * 25;
+            this.xInd = xInd;
+            this.yInd = yInd;
         }
 
         public int Index { get { return index; } set { index = value; } }
 
+        public void UpdateInd()
+        {
+            xInd = this.X;
+            yInd = this.Y;
+        }
+
         public override void Draw(Graphics g)
         {
-            throw new NotImplementedException();
+            g.FillRectangle(Brushes.Black, new Rectangle(new Point(xInd * 25 + 1, yInd * 25 + 1), new Size(24, 24)));
         }
     }
 }

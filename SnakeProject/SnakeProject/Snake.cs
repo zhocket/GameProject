@@ -10,15 +10,14 @@ namespace SnakeProject
     class Snake : VectorObject
     {
         private int index;
-        private List<Body> snake;
+        public LinkedList<Body> snake;
         private int xInd, yInd;
         public Snake(int xInd, int yInd, direction dir, int indx) : base(xInd*25, yInd*25, dir)
         {
-            snake = new List<Body>();
+            snake = new LinkedList<Body>();
             index = indx;
             this.xInd = xInd;
             this.yInd = yInd;
-            snake.Add(new Body(xInd, yInd, index));
         }
 
         public void Move(direction thisDirection)
@@ -38,6 +37,21 @@ namespace SnakeProject
                     yInd += 1;
                     break;
             }
+        }
+
+        public void CutTail()
+        {
+            int size = snake.Count;
+            snake.Last.Value.X = this.xInd;
+            snake.Last.Value.Y = this.yInd;
+            snake.Last.Value.UpdateInd();
+            snake.AddFirst(snake.Last.Value);
+            snake.RemoveLast();
+        }
+        
+        public void AddBody(int length)
+        {
+            snake.AddFirst(new Body(xInd+length, yInd, index++));
         }
 
         public override void Draw(Graphics g)
