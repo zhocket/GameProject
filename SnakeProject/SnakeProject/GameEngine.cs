@@ -11,38 +11,56 @@ namespace SnakeProject
     class GameEngine
     {
         MainForm window;
+        GameBoard board;
+        Snake player1;
         public void Initialize()
         {
             window = new MainForm();
             Timer time = new Timer();
             time.Tick += TimerEventHandler;
-
-            time.Interval = 1000 / 25;
+            window.Paint += Draw;
+            window.KeyDown += KeyPressed;
+            time.Interval = 250;
             time.Start();
-
+            board = new GameBoard(0, 0, 16, 20);
+            player1 = new Snake(8, 10, VectorObject.direction.left, 0);
+            player1.CurrentDirection = VectorObject.direction.left;
             Application.Run(window);
         }
 
         public void Run()
         {
-            
+            player1.Move(player1.CurrentDirection);
         }
 
         private void TimerEventHandler(object sender, EventArgs e)
         {
-            
-            window.Paint += Draw;
+            Run();
             window.Refresh();
         }
 
         public void Draw(Object obj, PaintEventArgs pe)
         {
-
-
+            board.Draw(pe.Graphics);
+            player1.Draw(pe.Graphics);
         }
-        public void KeyPressed(Object obj, KeyEventArgs key)
+        public void KeyPressed(object obj, KeyEventArgs key)
         {
-
+            switch (key.KeyCode)
+            {
+                case Keys.Left:
+                    player1.CurrentDirection = VectorObject.direction.left;
+                    break;
+                case Keys.Right:
+                    player1.CurrentDirection = VectorObject.direction.right;
+                    break;
+                case Keys.Up:
+                    player1.CurrentDirection = VectorObject.direction.up;
+                    break;
+                case Keys.Down:
+                    player1.CurrentDirection = VectorObject.direction.down;
+                    break;
+            }
         }
 
     }

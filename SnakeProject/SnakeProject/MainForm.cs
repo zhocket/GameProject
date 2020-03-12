@@ -11,10 +11,12 @@ namespace SnakeProject
     class MainForm : Form
     {
         public MainForm() : base(){
-            Height = 640;
-            Width = 840;
+            Height = 480;
+            Width = 560;
             //BackColor = Color.Purple;
             Text = "Snake Game";
-            }
+            this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+
+        }
     }
 }

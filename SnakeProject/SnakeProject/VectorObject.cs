@@ -11,17 +11,19 @@ namespace SnakeProject
     {
         public enum direction { up, down, left, right};
         private direction thisDirection;
-        private float speed;
-        public VectorObject(int x, int y, string direct, float speed) : base(x, y)
+        private int x;
+        private int y;
+        public VectorObject(int x, int y, direction dir) : base(x, y)
         {
-            thisDirection = (direction) Enum.Parse(typeof(direction), direct);
-            this.speed = speed;
+            this.x = x;
+            this.y = y;
+            thisDirection = dir;
         }
 
         
         public direction CurrentDirection { get { return thisDirection; } set { thisDirection = value; } }
 
-        public Point nextPosition(int x, int y)
+        public Point nextPosition()
         {
             return new Point(x, y);
         }

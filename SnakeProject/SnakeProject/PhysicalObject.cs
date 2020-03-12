@@ -9,12 +9,15 @@ namespace SnakeProject
 {
     abstract class PhysicalObject : GameObject
     {
+        private int xPos;
+        private int yPos;
         public PhysicalObject(int x, int y) : base(x, y)
         {
-
+            xPos = x;
+            yPos = y;
         }
 
-        public bool CheckCollision(int xPos, int yPos, int xNext, int yNext)
+        public bool CheckCollision(int xNext, int yNext)
         {
             return false;
         }
