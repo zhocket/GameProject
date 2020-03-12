@@ -14,7 +14,8 @@ namespace SnakeProject
         GameBoard board;
         Timer time;
         Snake player1;
-        private int snakeLength;
+        Label score;
+        private int snakeLength, points;
         public void Initialize()
         {
             window = new MainForm();
@@ -24,14 +25,26 @@ namespace SnakeProject
             window.KeyDown += KeyPressed;
             time.Interval = 150;
             time.Start();
-            snakeLength = 5;
 
+            score = new Label();
             board = new GameBoard(0, 0, 16, 20);
             player1 = new Snake(8, 10, VectorObject.direction.left, 0);
             player1.CurrentDirection = VectorObject.direction.left;
+
+            points = 0;
+            snakeLength = 5;
             for (int i = 0; i < snakeLength; i++)
                 player1.AddBody(snakeLength-i);
             board.AddFood();
+            
+            score.Text = "Score: " + points.ToString();
+            score.Font = new Font("Calibri", 16);
+            score.Location = new Point(20, 16*25 + 5);
+            score.Visible = true;
+            score.ForeColor = Color.Black;
+            score.Refresh();
+            window.Controls.Add(score);
+
             Application.Run(window);
         }
 
@@ -40,13 +53,23 @@ namespace SnakeProject
             
             player1.CutTail();
             player1.Move(player1.CurrentDirection);
-            
+            if(player1.CheckCollision(board.foodList[0].X, board.foodList[0].Y) == true)
+            {
+                points++;
+                board.foodList.Remove(board.foodList[0]);
+                player1.AddBody(0);
+                snakeLength++;
+                board.AddFood();
+                score.Text = "Score: " + points.ToString();
+            }
+
         }
 
         private void TimerEventHandler(object sender, EventArgs e)
         {
             Run();
             window.Refresh();
+            score.Refresh();
         }
 
         public void Draw(Object obj, PaintEventArgs pe)
@@ -74,11 +97,6 @@ namespace SnakeProject
                     break;
                 case Keys.Down:
                     player1.CurrentDirection = VectorObject.direction.down;
-                    break;
-                case Keys.Space:
-                    player1.AddBody(0);
-                    snakeLength++;
-                    board.AddFood();
                     break;
             }
         }

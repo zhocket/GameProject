@@ -22,6 +22,7 @@ namespace SnakeProject
 
         public void Move(direction thisDirection)
         {
+            
             switch (thisDirection)
             {
                 case direction.left:
@@ -37,6 +38,8 @@ namespace SnakeProject
                     yInd += 1;
                     break;
             }
+            this.X = xInd;
+            this.Y = yInd;
         }
 
         public void CutTail()

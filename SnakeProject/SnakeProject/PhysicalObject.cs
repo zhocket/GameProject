@@ -9,17 +9,16 @@ namespace SnakeProject
 {
     abstract class PhysicalObject : GameObject
     {
-        private int xPos;
-        private int yPos;
-        public PhysicalObject(int x, int y) : base(x, y)
-        {
-            xPos = x;
-            yPos = y;
-        }
+        public PhysicalObject(int x, int y) : base(x, y) { }
 
-        public bool CheckCollision(int xNext, int yNext)
+        public bool CheckCollision(int xOther, int yOther)
         {
-            return false;
+            if (new Rectangle(X, Y, 1, 1).IntersectsWith(new Rectangle(xOther, yOther, 1, 1)) == true)
+            {
+                return true;
+            }
+            else
+                return false;
         }
 
     }
