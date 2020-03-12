@@ -14,14 +14,22 @@ namespace SnakeProject
         private GameObject[,] board;
         private int width;
         private int height;
+        public List<Food> foodList;
         public GameBoard(int x, int y, int height, int width) : base(x, y)
         {
             board = new GameObject[width, height];
             this.width = width*25;
             this.height = height*25;
+            foodList = new List<Food>();
         }
 
         public GameObject[,] Matrix { get { return board; } }
+
+        public void AddFood()
+        {
+            Random rndm = new Random();
+            foodList.Add(new Food(rndm.Next(1, width/25), rndm.Next(1, height/25)));
+        }
 
         public override void Draw(Graphics g)
         {

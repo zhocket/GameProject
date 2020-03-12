@@ -12,16 +12,17 @@ namespace SnakeProject
     {
         MainForm window;
         GameBoard board;
+        Timer time;
         Snake player1;
         private int snakeLength;
         public void Initialize()
         {
             window = new MainForm();
-            Timer time = new Timer();
+            time = new Timer();
             time.Tick += TimerEventHandler;
             window.Paint += Draw;
             window.KeyDown += KeyPressed;
-            time.Interval = 250;
+            time.Interval = 150;
             time.Start();
             snakeLength = 5;
 
@@ -30,12 +31,13 @@ namespace SnakeProject
             player1.CurrentDirection = VectorObject.direction.left;
             for (int i = 0; i < snakeLength; i++)
                 player1.AddBody(snakeLength-i);
+            board.AddFood();
             Application.Run(window);
         }
 
         public void Run()
         {
-
+            
             player1.CutTail();
             player1.Move(player1.CurrentDirection);
             
@@ -51,10 +53,11 @@ namespace SnakeProject
         {
             board.Draw(pe.Graphics);
             player1.Draw(pe.Graphics);
+            
             foreach (Body body in player1.snake)
-            {
                 body.Draw(pe.Graphics);
-            }
+            foreach (Food foodItem in board.foodList)
+                foodItem.Draw(pe.Graphics);
         }
         public void KeyPressed(object obj, KeyEventArgs key)
         {
@@ -71,6 +74,11 @@ namespace SnakeProject
                     break;
                 case Keys.Down:
                     player1.CurrentDirection = VectorObject.direction.down;
+                    break;
+                case Keys.Space:
+                    player1.AddBody(0);
+                    snakeLength++;
+                    board.AddFood();
                     break;
             }
         }
