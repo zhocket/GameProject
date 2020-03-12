@@ -23,8 +23,9 @@ namespace SnakeProject
             time.Tick += TimerEventHandler;
             window.Paint += Draw;
             window.KeyDown += KeyPressed;
-            time.Interval = 150;
+            time.Interval = 250;
             time.Start();
+
 
             score = new Label();
             board = new GameBoard(0, 0, 16, 20);
@@ -44,8 +45,8 @@ namespace SnakeProject
             score.ForeColor = Color.Black;
             score.Refresh();
             window.Controls.Add(score);
+            window.ShowDialog();
 
-            Application.Run(window);
         }
 
         public void Run()

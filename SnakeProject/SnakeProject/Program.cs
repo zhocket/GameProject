@@ -14,9 +14,9 @@ namespace SnakeProject
         [STAThread]
         static void Main()
         {
-            GameEngine engine = new GameEngine();
-            engine.Initialize();
-            engine.Run();
+            
+            Menu menu = new Menu();
+            menu.Start();
         }
     }
 }
