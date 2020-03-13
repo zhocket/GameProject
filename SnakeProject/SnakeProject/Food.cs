@@ -10,15 +10,17 @@ namespace SnakeProject
     class Food : PhysicalObject
     {
         private int x, y;
-        public Food(int xInd, int yInd) : base(xInd, yInd)
+        private Brush color;
+        public Food(int xInd, int yInd, Brush brush) : base(xInd, yInd)
         {
             x = xInd;
             y = yInd;
+            color = brush;
         }
-
+        public Brush Color { get { return color; } set { color = value; } }
         public override void Draw(Graphics g)
         {
-            g.FillRectangle(Brushes.CornflowerBlue, new Rectangle(new Point(x * 25 + 1, y * 25 + 1), new Size(24, 24)));
+            g.FillRectangle(color, new Rectangle(new Point(x * 25 + 1, y * 25 + 1), new Size(24, 24)));
 
         }
     }

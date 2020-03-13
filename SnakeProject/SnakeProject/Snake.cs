@@ -12,12 +12,14 @@ namespace SnakeProject
         private int index;
         public LinkedList<Body> snake;
         private int xInd, yInd;
-        public Snake(int xInd, int yInd, direction dir, int indx) : base(xInd*25, yInd*25, dir)
+        private Brush color;
+        public Snake(int xInd, int yInd, direction dir, int indx, Brush color) : base(xInd*25, yInd*25, dir)
         {
             snake = new LinkedList<Body>();
             index = indx;
             this.xInd = xInd;
             this.yInd = yInd;
+            this.color = color;
         }
 
         public void Move(direction thisDirection)
@@ -51,6 +53,35 @@ namespace SnakeProject
             snake.AddFirst(snake.Last.Value);
             snake.RemoveLast();
         }
+
+        public int CheckForFood(Food fooditem, GameBoard board, int points)
+        {
+            points = 0;
+            if (this.CheckCollision(fooditem.X, fooditem.Y) == true && fooditem.Color == Brushes.CornflowerBlue)
+            {
+                
+                board.foodList.Remove(fooditem);
+                AddBody(0);
+                board.AddFood(new Random(), 1, 1, Brushes.CornflowerBlue);
+                return ++points;
+            }
+            else if (this.CheckCollision(fooditem.X, fooditem.Y) == true && fooditem.Color == Brushes.Purple)
+            {
+                board.foodList.Remove(fooditem);
+                AddBody(0);
+                AddBody(0);
+                board.AddFood(new Random(), 1, 1, Brushes.Purple);
+                return points += 5;
+            }
+            else if (this.CheckCollision(fooditem.X, fooditem.Y) == true && fooditem.Color == Brushes.LightBlue)
+            {
+                board.foodList.Remove(fooditem);
+          //      snake.RemoveLast();
+                board.AddFood(new Random(), 1, 1, Brushes.LightBlue);
+                return ++points;
+            }
+            return 0;
+        }
         
         public void AddBody(int length)
         {
@@ -59,7 +90,7 @@ namespace SnakeProject
 
         public override void Draw(Graphics g)
         {
-            g.FillRectangle(Brushes.Red, new Rectangle(new Point(xInd*25+1, yInd*25+1), new Size(24, 24)));
+            g.FillRectangle(color, new Rectangle(new Point(xInd*25+1, yInd*25+1), new Size(24, 24)));
         }
     }
 }

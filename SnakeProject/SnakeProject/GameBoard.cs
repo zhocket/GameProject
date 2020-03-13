@@ -25,10 +25,10 @@ namespace SnakeProject
 
         
 
-        public void AddFood(Random rndm, int x, int y)
+        public void AddFood(Random rndm, int x, int y, Brush color)
         {
             
-            foodList.Add(new Food(rndm.Next(x, width/25), rndm.Next(y, height/25)));
+            foodList.Add(new Food(rndm.Next(x, width/25), rndm.Next(y, height/25), color));
         }
 
         public override void Draw(Graphics g)

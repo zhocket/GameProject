@@ -20,6 +20,14 @@ namespace SnakeProject
             else
                 return false;
         }
+        public bool OutOfBounds()
+        {
+            if (X < 1 || X > 20)
+                return true;
+            if (Y < 1 || Y > 16)
+                return true;
+            return false;
+        }
 
     }
 }

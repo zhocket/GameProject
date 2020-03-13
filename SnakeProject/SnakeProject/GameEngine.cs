@@ -13,9 +13,11 @@ namespace SnakeProject
         MainForm window;
         GameBoard board;
         Timer time;
-        Snake player1;
-        Label score;
-        private int snakeLength, points;
+        Snake player1, player2;
+        Label score1, score2;
+        private int snakeLength1, snakeLength2;
+        private int points1, points2;
+
         public void Initialize()
         {
             window = new MainForm();
@@ -28,23 +30,44 @@ namespace SnakeProject
             window.BackColor = Color.Black;
 
 
-            score = new Label();
+            score1 = new Label();
+            score2 = new Label();
             board = new GameBoard(0, 0, 16, 20);
-            player1 = new Snake(8, 10, VectorObject.direction.left, 0);
-            player1.CurrentDirection = VectorObject.direction.left;
+            player1 = new Snake(8, 10, VectorObject.direction.left, 0, Brushes.Red);
+            player2 = new Snake(4, 6, VectorObject.direction.right, 0, Brushes.LimeGreen);
 
-            points = 0;
-            snakeLength = 5;
-            for (int i = 0; i < snakeLength; i++)
-                player1.AddBody(snakeLength-i);
-            
-            score.Text = "Score: " + points.ToString();
-            score.Font = new Font("Calibri", 16);
-            score.Location = new Point(20, 16*25 + 5);
-            score.Visible = true;
-            score.ForeColor = Color.Black;
-            score.Refresh();
-            window.Controls.Add(score);
+            points1 = 0;
+            points2 = 0;
+            snakeLength1 = 5;
+            snakeLength2 = 5;
+            for (int i = 0; i < snakeLength1; i++)
+                player1.AddBody(snakeLength1-i);
+            for (int i = 0; i < snakeLength2; i++)
+                player2.AddBody(snakeLength2 - i);
+
+            board.AddFood(new Random(), 2, 6, Brushes.CornflowerBlue);
+            board.AddFood(new Random(), 1, 3, Brushes.Purple);
+            board.AddFood(new Random(), 3, 5, Brushes.LightBlue);
+
+
+
+            score1.Text = "P1: " + points1.ToString();
+            score1.Font = new Font("Calibri", 16, FontStyle.Bold);
+            score1.Location = new Point(4, 4);
+            score1.Visible = true;
+            score1.ForeColor = Color.Red;
+            score1.BackColor = Color.Transparent;
+
+            score2.Text = "P2: " + points1.ToString();
+            score2.Font = new Font("Calibri", 16, FontStyle.Bold);
+            score2.Location = new Point(16*25, 4);
+            score2.Visible = true;
+            score2.ForeColor = Color.LimeGreen;
+            score2.BackColor = Color.Transparent;
+
+            window.Controls.Add(score1);
+            window.Controls.Add(score2);
+
             window.ShowDialog();
         }
 
@@ -58,20 +81,48 @@ namespace SnakeProject
 
         public void Run()
         {
-            for (int i = 0; board.foodList.Count < 3; i++)
-                board.AddFood(new Random(), i, i*2);
+            score1.Text = "P1: " + points1.ToString();
+            score2.Text = "P2: " + points2.ToString();
+
             player1.CutTail();
             player1.Move(player1.CurrentDirection);
+            player2.CutTail();
+            player2.Move(player2.CurrentDirection);
+            if(player2.OutOfBounds() == true)
+            {
+                time.Stop();
+                score1.Text = "GAME OVER \nPlayer 1 wins!\nScore: " + points1.ToString() + "\n\n[ESC] back to menu ";
+                score1.AutoSize = true;
+                score1.Location = new Point(window.Width / 2 - 80, window.Height / 2 - score1.Height);
+                score1.BackColor = Color.LightSalmon;
+                score1.BorderStyle = BorderStyle.FixedSingle;
+            }
+            if(player1.OutOfBounds() == true)
+            {
+                time.Stop();
+                score2.Text = "GAME OVER \nPlayer 2 wins!\nScore: " + points2.ToString() + "\n\n[ESC] back to menu ";
+                score2.AutoSize = true;
+                score2.Location = new Point(window.Width / 2 - 80, window.Height / 2 - score2.Height);
+                score2.BackColor = Color.LightGreen;
+                score2.BorderStyle = BorderStyle.FixedSingle;
+            }
+
             foreach (Food fooditem in board.foodList)
             {
-                if (player1.CheckCollision(fooditem.X, fooditem.Y) == true)
+                int temp = player1.CheckForFood(fooditem, board, points1);
+                if (temp > 0)
                 {
-                    points++;
-                    board.foodList.Remove(fooditem);
-                    player1.AddBody(0);
-                    snakeLength++;
-                    board.AddFood(new Random(), 1, 1);
-                    score.Text = "Score: " + points.ToString();
+                    points1 += temp;
+                    break;
+                }
+
+            }
+            foreach (Food fooditem in board.foodList)
+            {
+                int temp = player2.CheckForFood(fooditem, board, points2);
+                if (temp > 0)
+                {
+                    points2 += temp;
                     break;
                 }
             }
@@ -82,15 +133,19 @@ namespace SnakeProject
         {
             Run();
             window.Refresh();
-            score.Refresh();
+            score1.Refresh();
+            score2.Refresh();
+
         }
 
         public void Draw(Object obj, PaintEventArgs pe)
         {
             board.Draw(pe.Graphics);
             player1.Draw(pe.Graphics);
-            
+            player2.Draw(pe.Graphics);
             foreach (Body body in player1.snake)
+                body.Draw(pe.Graphics);
+            foreach (Body body in player2.snake)
                 body.Draw(pe.Graphics);
             foreach (Food foodItem in board.foodList)
                 foodItem.Draw(pe.Graphics);
@@ -112,6 +167,23 @@ namespace SnakeProject
                     player1.CurrentDirection = VectorObject.direction.down;
                     break;
             }
+            switch (key.KeyCode)
+            {
+                case Keys.A:
+                    player2.CurrentDirection = VectorObject.direction.left;
+                    break;
+                case Keys.D:
+                    player2.CurrentDirection = VectorObject.direction.right;
+                    break;
+                case Keys.W:
+                    player2.CurrentDirection = VectorObject.direction.up;
+                    break;
+                case Keys.S:
+                    player2.CurrentDirection = VectorObject.direction.down;
+                    break;
+            }
+            if (key.KeyCode == Keys.Escape)
+                this.window.Close();
         }
 
     }
