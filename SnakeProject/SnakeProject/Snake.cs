@@ -12,11 +12,12 @@ namespace SnakeProject
         private int index;
         public LinkedList<Body> snake;
         private int xInd, yInd;
-        private Brush color;
+        public Brush color;
         public Snake(int xInd, int yInd, direction dir, int indx, Brush color) : base(xInd*25, yInd*25, dir)
         {
             snake = new LinkedList<Body>();
             index = indx;
+            this.CurrentDirection = dir;
             this.xInd = xInd;
             this.yInd = yInd;
             this.color = color;
@@ -76,7 +77,7 @@ namespace SnakeProject
             else if (this.CheckCollision(fooditem.X, fooditem.Y) == true && fooditem.Color == Brushes.LightBlue)
             {
                 board.foodList.Remove(fooditem);
-          //      snake.RemoveLast();
+                snake.RemoveLast();
                 board.AddFood(new Random(), 1, 1, Brushes.LightBlue);
                 return ++points;
             }

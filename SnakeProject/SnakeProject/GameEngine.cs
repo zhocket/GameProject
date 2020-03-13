@@ -43,7 +43,7 @@ namespace SnakeProject
             for (int i = 0; i < snakeLength1; i++)
                 player1.AddBody(snakeLength1-i);
             for (int i = 0; i < snakeLength2; i++)
-                player2.AddBody(snakeLength2 - i);
+                player2.AddBody(-snakeLength2-i);
 
             board.AddFood(new Random(), 2, 6, Brushes.CornflowerBlue);
             board.AddFood(new Random(), 1, 3, Brushes.Purple);
@@ -79,6 +79,22 @@ namespace SnakeProject
             
         }
 
+        public void EndGame(Snake player, Label score, int points)
+        {
+            time.Stop();
+            if(player.color == Brushes.Red)
+                 score.Text = "GAME OVER \n" + "Red player " + "wins!\nScore: " + points.ToString() + "\n\n[ESC] back to menu ";
+            if (player.color == Brushes.LimeGreen)
+                score.Text = "GAME OVER \n" + "Green player " + "wins!\nScore: " + points.ToString() + "\n\n[ESC] back to menu ";
+            score.AutoSize = true;
+            score.Location = new Point(window.Width / 2 - 80, window.Height / 2 - score.Height);
+            if (player.color == Brushes.Red)
+                score.BackColor = Color.LightSalmon;
+            else
+                score.BackColor = Color.LightGreen;
+            score.BorderStyle = BorderStyle.FixedSingle;
+        }
+
         public void Run()
         {
             score1.Text = "P1: " + points1.ToString();
@@ -90,21 +106,11 @@ namespace SnakeProject
             player2.Move(player2.CurrentDirection);
             if(player2.OutOfBounds() == true)
             {
-                time.Stop();
-                score1.Text = "GAME OVER \nPlayer 1 wins!\nScore: " + points1.ToString() + "\n\n[ESC] back to menu ";
-                score1.AutoSize = true;
-                score1.Location = new Point(window.Width / 2 - 80, window.Height / 2 - score1.Height);
-                score1.BackColor = Color.LightSalmon;
-                score1.BorderStyle = BorderStyle.FixedSingle;
+                EndGame(player1, score1, points1);
             }
             if(player1.OutOfBounds() == true)
             {
-                time.Stop();
-                score2.Text = "GAME OVER \nPlayer 2 wins!\nScore: " + points2.ToString() + "\n\n[ESC] back to menu ";
-                score2.AutoSize = true;
-                score2.Location = new Point(window.Width / 2 - 80, window.Height / 2 - score2.Height);
-                score2.BackColor = Color.LightGreen;
-                score2.BorderStyle = BorderStyle.FixedSingle;
+                EndGame(player2, score2, points2);
             }
 
             foreach (Food fooditem in board.foodList)
@@ -127,6 +133,25 @@ namespace SnakeProject
                 }
             }
 
+            //Green player collide with red
+            foreach (Body body in player1.snake)
+            {
+                if (player2.CheckCollision(body.X, body.Y) || player2.CheckCollision(player1.X, player1.Y))
+                    EndGame(player1, score1, points1);
+                if (player1.CheckCollision(body.X, body.Y) && body != player1.snake.First.Value && body != player1.snake.First.Next.Value)
+                    EndGame(player2, score2, points2);
+                
+            }
+            
+
+            //Red player collide with green
+            foreach (Body body in player2.snake)
+            {
+                if (player1.CheckCollision(body.X, body.Y) || player1.CheckCollision(player2.X, player2.Y))
+                    EndGame(player2, score2, points2);
+                if (player2.CheckCollision(body.X, body.Y) && body != player2.snake.First.Value && body != player2.snake.First.Next.Value)
+                    EndGame(player1, score1, points1);
+            }
         }
 
         private void TimerEventHandler(object sender, EventArgs e)
@@ -155,31 +180,39 @@ namespace SnakeProject
             switch (key.KeyCode)
             {
                 case Keys.Left:
-                    player1.CurrentDirection = VectorObject.direction.left;
+                    if(player1.CurrentDirection != VectorObject.direction.right)
+                       player1.CurrentDirection = VectorObject.direction.left;
                     break;
                 case Keys.Right:
-                    player1.CurrentDirection = VectorObject.direction.right;
+                    if (player1.CurrentDirection != VectorObject.direction.left)
+                        player1.CurrentDirection = VectorObject.direction.right;
                     break;
                 case Keys.Up:
-                    player1.CurrentDirection = VectorObject.direction.up;
+                    if (player1.CurrentDirection != VectorObject.direction.down)
+                        player1.CurrentDirection = VectorObject.direction.up;
                     break;
                 case Keys.Down:
-                    player1.CurrentDirection = VectorObject.direction.down;
+                    if (player1.CurrentDirection != VectorObject.direction.up)
+                        player1.CurrentDirection = VectorObject.direction.down;
                     break;
             }
             switch (key.KeyCode)
             {
                 case Keys.A:
-                    player2.CurrentDirection = VectorObject.direction.left;
+                    if (player2.CurrentDirection != VectorObject.direction.right)
+                        player2.CurrentDirection = VectorObject.direction.left;
                     break;
                 case Keys.D:
-                    player2.CurrentDirection = VectorObject.direction.right;
+                    if (player2.CurrentDirection != VectorObject.direction.left)
+                        player2.CurrentDirection = VectorObject.direction.right;
                     break;
                 case Keys.W:
-                    player2.CurrentDirection = VectorObject.direction.up;
+                    if (player2.CurrentDirection != VectorObject.direction.down)
+                        player2.CurrentDirection = VectorObject.direction.up;
                     break;
                 case Keys.S:
-                    player2.CurrentDirection = VectorObject.direction.down;
+                    if (player2.CurrentDirection != VectorObject.direction.up)
+                        player2.CurrentDirection = VectorObject.direction.down;
                     break;
             }
             if (key.KeyCode == Keys.Escape)
