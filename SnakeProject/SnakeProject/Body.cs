@@ -29,7 +29,7 @@ namespace SnakeProject
 
         public override void Draw(Graphics g)
         {
-            g.FillRectangle(Brushes.Black, new Rectangle(new Point(xInd * 25 + 1, yInd * 25 + 1), new Size(24, 24)));
+            g.FillRectangle(Brushes.DarkGray, new Rectangle(new Point(xInd * 25 + 1, yInd * 25 + 1), new Size(24, 24)));
         }
     }
 }

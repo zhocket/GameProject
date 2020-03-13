@@ -23,23 +23,23 @@ namespace SnakeProject
             foodList = new List<Food>();
         }
 
-        public GameObject[,] Matrix { get { return board; } }
+        
 
-        public void AddFood()
+        public void AddFood(Random rndm, int x, int y)
         {
-            Random rndm = new Random();
-            foodList.Add(new Food(rndm.Next(1, width/25), rndm.Next(1, height/25)));
+            
+            foodList.Add(new Food(rndm.Next(x, width/25), rndm.Next(y, height/25)));
         }
 
         public override void Draw(Graphics g)
         {
             for (int ix = 0; ix < width+1; ix += 24)
             {
-                g.DrawLine(new Pen(Color.DarkGray, 1), ix, 0, ix, height);
+                g.DrawLine(new Pen(Color.Black, 1), ix, 0, ix, height);
                 ix += 1;
                 for(int iy = 0; iy < height+1; iy += 24)
                 {
-                    g.DrawLine(new Pen(Color.DarkGray, 1), 0, iy, width, iy);
+                    g.DrawLine(new Pen(Color.Black, 1), 0, iy, width, iy);
                     iy += 1;
                 }
             }

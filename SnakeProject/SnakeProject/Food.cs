@@ -18,7 +18,7 @@ namespace SnakeProject
 
         public override void Draw(Graphics g)
         {
-            g.FillRectangle(Brushes.Yellow, new Rectangle(new Point(x * 25 + 1, y * 25 + 1), new Size(24, 24)));
+            g.FillRectangle(Brushes.CornflowerBlue, new Rectangle(new Point(x * 25 + 1, y * 25 + 1), new Size(24, 24)));
 
         }
     }

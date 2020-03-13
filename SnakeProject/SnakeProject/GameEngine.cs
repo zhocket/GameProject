@@ -23,8 +23,9 @@ namespace SnakeProject
             time.Tick += TimerEventHandler;
             window.Paint += Draw;
             window.KeyDown += KeyPressed;
-            time.Interval = 250;
+            time.Interval = 100;
             time.Start();
+            window.BackColor = Color.Black;
 
 
             score = new Label();
@@ -36,7 +37,6 @@ namespace SnakeProject
             snakeLength = 5;
             for (int i = 0; i < snakeLength; i++)
                 player1.AddBody(snakeLength-i);
-            board.AddFood();
             
             score.Text = "Score: " + points.ToString();
             score.Font = new Font("Calibri", 16);
@@ -46,22 +46,34 @@ namespace SnakeProject
             score.Refresh();
             window.Controls.Add(score);
             window.ShowDialog();
+        }
 
+        public void StartMenu()
+        {
+            window = new MainForm();
+            Menu menu = new Menu();
+            menu.Start(window);
+            
         }
 
         public void Run()
         {
-            
+            for (int i = 0; board.foodList.Count < 3; i++)
+                board.AddFood(new Random(), i, i*2);
             player1.CutTail();
             player1.Move(player1.CurrentDirection);
-            if(player1.CheckCollision(board.foodList[0].X, board.foodList[0].Y) == true)
+            foreach (Food fooditem in board.foodList)
             {
-                points++;
-                board.foodList.Remove(board.foodList[0]);
-                player1.AddBody(0);
-                snakeLength++;
-                board.AddFood();
-                score.Text = "Score: " + points.ToString();
+                if (player1.CheckCollision(fooditem.X, fooditem.Y) == true)
+                {
+                    points++;
+                    board.foodList.Remove(fooditem);
+                    player1.AddBody(0);
+                    snakeLength++;
+                    board.AddFood(new Random(), 1, 1);
+                    score.Text = "Score: " + points.ToString();
+                    break;
+                }
             }
 
         }

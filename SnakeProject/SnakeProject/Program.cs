@@ -11,12 +11,14 @@ namespace SnakeProject
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
+        ///
         [STAThread]
+
+        
         static void Main()
         {
-            
-            Menu menu = new Menu();
-            menu.Start();
+            GameEngine engine = new GameEngine();
+            engine.StartMenu();
         }
     }
 }
